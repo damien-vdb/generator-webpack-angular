@@ -4,15 +4,28 @@ var ConfigBuilder = require('./webpack.config-builder');
 
 var ENV = process.env.npm_lifecycle_event;
 var test = ENV === 'test' || ENV === 'test-watch';
+var prod = ENV === 'build';
 
 var configBuilder = new ConfigBuilder();
+
 if (test) {
-	configBuilder.entryPoint({});
+	configBuilder
+		.withoutOutput()
+		.devtool('inline-source-map')
+		.coverage();
+} else if (prod) {
+	configBuilder
+		.entryPoint('./src/app/app.js')
+		.hashedOutput()
+		.devtool('source-map')
+		.noErrors()
+		.minify();
 } else {
-	configBuilder.entryPoint({
-		app : './src/app/app.js'
-	});
+	configBuilder
+		.devtool('eval-source-map')
+		.entryPoint('./src/app/app.js');
 }
+
 var config = configBuilder.generate();
 
 module.exports = config;

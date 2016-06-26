@@ -18,52 +18,69 @@ var isProd = ENV === 'build';
 module.exports = ConfigBuilder;
 
 function ConfigBuilder() {
+	
+
+	var that = this;
+  
   /**
    * Config
    * Reference: http://webpack.github.io/docs/this.configuration.html
    * This is the object where all this.configuration gets set
    */
-  this.config = {};
+  this.config = {
+		  entry : {},
+  };
+  
+  this.output = true;
+  this.fileNames = '[name].bundle.js';
+  
+  function computeOutput() {
+	  if(!that.output) {
+		  return {};
+	  }
+	  return {
+		    // Absolute output directory
+		    path: __dirname + '/dist',
+
+		    // Output path from the view of the page
+		    // Uses webpack-dev-server in development
+		    publicPath: '/',
+
+		    // Filename for entry points
+		    // Only adds hash in build mode
+		    filename: that.fileNames + '.js',
+
+		    // Filename for non-entry points
+		    // Only adds hash in build mode
+		    chunkFilename: that.fileNames + '.js'
+		  };	
+  }
+
+  this.withoutOutput = function() {
+	  this.output = false;
+	  return this;
+  }
+  
+  this.hashedOutput = function() {
+	  this.fileNames = '[name].[hash]';
+	  return this;
+  }
+  
+  this.generate = function() {
+	  this.config.output = computeOutput();
+	  console.log('config : '+ this.config);
+	  return this.config;
+  }
 
   this.entryPoint = function(entry) {
-	  this.config.entry = entry;
-  }
-
-  /**
-   * Output
-   * Reference: http://webpack.github.io/docs/this.configuration.html#output
-   * Should be an empty object if it's generating a test build
-   * Karma will handle setting it up for you when it's a test build
-   */
-  this.config.output = isTest ? {} : {
-    // Absolute output directory
-    path: __dirname + '/dist',
-
-    // Output path from the view of the page
-    // Uses webpack-dev-server in development
-    publicPath: isProd ? '/' : 'http://localhost:8080/',
-
-    // Filename for entry points
-    // Only adds hash in build mode
-    filename: isProd ? '[name].[hash].js' : '[name].bundle.js',
-
-    // Filename for non-entry points
-    // Only adds hash in build mode
-    chunkFilename: isProd ? '[name].[hash].js' : '[name].bundle.js'
+	  this.config.entry.app = entry;
+	  return this;
   };
 
-  /**
-   * Devtool
-   * Reference: http://webpack.github.io/docs/this.configuration.html#devtool
-   * Type of sourcemap to use per build type
-   */
-  if (isTest) {
-    this.config.devtool = 'inline-source-map';
-  } else if (isProd) {
-    this.config.devtool = 'source-map';
-  } else {
-    this.config.devtool = 'eval-source-map';
-  }
+  this.devtool = function(devtool) {
+	  this.config.devtool = devtool;
+	  return this;
+  };
 
   /**
    * Loaders
@@ -107,20 +124,21 @@ function ConfigBuilder() {
     }]
   };
 
-  // ISPARTA LOADER
-  // Reference: https://github.com/ColCh/isparta-instrumenter-loader
-  // Instrument JS files with Isparta for subsequent code coverage reporting
-  // Skips node_modules and files that end with .test.js
-  if (isTest) {
-    this.config.module.preLoaders.push({
-      test: /\.js$/,
-      exclude: [
-        /node_modules/,
-        /\.spec\.js$/
-      ],
-      loader: 'isparta-instrumenter'
-    })
-  }
+  this.coverage = function() {
+	  // ISPARTA LOADER
+	  // Reference: https://github.com/ColCh/isparta-instrumenter-loader
+	  // Instrument JS files with Isparta for subsequent code coverage reporting
+	  // Skips node_modules and files that end with .spec.js
+	  this.config.module.preLoaders.push({
+	      test: /\.js$/,
+	      exclude: [
+	        /node_modules/,
+	        /\.spec\.js$/
+	      ],
+	      loader: 'isparta-instrumenter'
+	    });
+	  return this;
+  };
 
   /**
    * PostCSS
@@ -157,21 +175,30 @@ function ConfigBuilder() {
     )
   }
 
+  this.noErrors = function() {
+	  this.config.plugins.push(
+		      // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
+		      // Only emit files when there are no errors
+		      new webpack.NoErrorsPlugin());
+	  return this;
+  }
+  
+  this.minify = function() {
+	  this.config.plugins.push(
+	    		
+		      // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
+		      // Dedupe modules in the output
+		      new webpack.optimize.DedupePlugin(),
+
+		      // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
+		      // Minify all javascript, switch loaders to minimizing mode
+		      new webpack.optimize.UglifyJsPlugin());
+	  return this;
+  }
   // Add build specific plugins
   if (isProd) {
     this.config.plugins.push(
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#noerrorsplugin
-      // Only emit files when there are no errors
-      new webpack.NoErrorsPlugin(),
-
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#dedupeplugin
-      // Dedupe modules in the output
-      new webpack.optimize.DedupePlugin(),
-
-      // Reference: http://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin
-      // Minify all javascript, switch loaders to minimizing mode
-      new webpack.optimize.UglifyJsPlugin(),
-
+    		
       // Copy assets from the public folder
       // Reference: https://github.com/kevlened/copy-webpack-plugin
       new CopyWebpackPlugin([{
@@ -189,10 +216,5 @@ function ConfigBuilder() {
     contentBase: './src/public',
     stats: 'minimal'
   };
-  
-  this.generate = function() {
-	  console.log('config : '+ this.config);
-	  return this.config;
-  }
 
 };
