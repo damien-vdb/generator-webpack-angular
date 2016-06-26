@@ -13,7 +13,7 @@ function route($routeProvider) {
 
 	$routeProvider.otherwise({
 		template : require('./screen/first-page/first-page.html'),
-		controller : 'AppCtrl',
-		controllerAs : 'app'
+		controller : 'FirstPageController',
+		controllerAs : 'firstPage'
 	});
 }

@@ -1,5 +1,5 @@
 
-angular.module('app').controller('AppCtrl', controller);
+angular.module('app').controller('FirstPageController', controller);
 
 function controller() {
 	var vm = this;

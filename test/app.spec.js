@@ -1,13 +1,13 @@
 describe('app', function() {
 
-	describe('AppCtrl', function() {
+	describe('FirstPageController', function() {
 		var ctrl;
 
 		beforeEach(function() {
 			angular.mock.module('app');
 
 			angular.mock.inject(function($controller) {
-				ctrl = $controller('AppCtrl', {});
+				ctrl = $controller('FirstPageController', {});
 			});
 		});
 
