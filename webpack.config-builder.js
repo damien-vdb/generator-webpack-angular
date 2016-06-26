@@ -49,7 +49,9 @@ function ConfigBuilder() {
 	};
 
 	this.generate = function() {
-		this.config.output = computeOutput();
+		if (this.output) {
+			computeOutput();
+		}
 		this.config.module.loaders = computeLoaders();
 		return this.config;
 	};
@@ -74,18 +76,6 @@ function ConfigBuilder() {
 		return this;
 	};
 
-	this.handleCss = function() {
-		this.cssLoaderValue = ExtractTextPlugin.extract('style',
-				'css?sourceMap!postcss');
-		this.config.plugins.push(
-				// Reference: https://github.com/webpack/extract-text-webpack-plugin
-				// Extract css files
-				new ExtractTextPlugin(that.fileNames + '.css', {
-					disable : !isProd
-				}));
-		return this;
-	};
-
 	this.coverage = function() {
 		// ISPARTA LOADER
 		// Reference: https://github.com/ColCh/isparta-instrumenter-loader
@@ -99,14 +89,6 @@ function ConfigBuilder() {
 		});
 		return this;
 	};
-
-	this.renderHtml = function() {
-		this.config.plugins.push(new HtmlWebpackPlugin({
-			template : './src/public/index.html',
-			inject : 'body'
-		}));
-		return this;
-	}
 
 	this.noErrors = function() {
 		this.config.plugins.push(
@@ -157,14 +139,32 @@ function ConfigBuilder() {
 	}
 
 	function computeOutput() {
-		if (!that.output) {
-			return {};
-		}
-		return {
+		that.config.output = {
 			path : __dirname + '/dist',
 			publicPath : '/',
 			filename : that.fileNames + '.js',
 			chunkFilename : that.fileNames + '.js'
 		};
+		renderHtml();
+		handleCss();
 	}
+
+	function renderHtml() {
+		that.config.plugins.push(new HtmlWebpackPlugin({
+			template : './src/public/index.html',
+			inject : 'body'
+		}));
+	}
+
+	function handleCss() {
+		that.cssLoaderValue = ExtractTextPlugin.extract('style',
+				'css?sourceMap!postcss');
+		that.config.plugins.push(
+		// Reference: https://github.com/webpack/extract-text-webpack-plugin
+		// Extract css files
+		new ExtractTextPlugin(that.fileNames + '.css', {
+			disable : !isProd
+		}));
+	}
+	;
 };

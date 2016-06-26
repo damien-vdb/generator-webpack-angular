@@ -16,19 +16,15 @@ if (test) {
 } else if (prod) {
 	configBuilder
 		.entryPoint('./src/app/app.js')
-		.hashedOutput()
 		.devtool('source-map')
-		.handleCss()
+		.hashedOutput()
 		.noErrors()
 		.minify()
-		.renderHtml()
 		.copyStaticResources();
 } else {
 	configBuilder
-		.devtool('eval-source-map')
-		.handleCss()
-		.renderHtml()
-		.entryPoint('./src/app/app.js');
+		.entryPoint('./src/app/app.js')
+		.devtool('eval-source-map');
 }
 
 var config = configBuilder.generate();
