@@ -7,13 +7,6 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-/**
- * Env Get npm lifecycle event to identify the environment
- */
-var ENV = process.env.npm_lifecycle_event;
-var isTest = ENV === 'test' || ENV === 'test-watch';
-var isProd = ENV === 'build';
-
 module.exports = ConfigBuilder;
 
 function ConfigBuilder() {
@@ -162,9 +155,7 @@ function ConfigBuilder() {
 		that.config.plugins.push(
 		// Reference: https://github.com/webpack/extract-text-webpack-plugin
 		// Extract css files
-		new ExtractTextPlugin(that.fileNames + '.css', {
-			disable : !isProd
-		}));
+		new ExtractTextPlugin(that.fileNames + '.css'));
 	}
 	;
 };

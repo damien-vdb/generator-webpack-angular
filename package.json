@@ -1,9 +1,10 @@
 {
-  "name": "angular-webpack-workflow",
-  "version": "1.0.0",
-  "description": "A workflow for Angular made with Webpack",
+  "name": "generator-webpack-angular",
+  "version": "0.0.1",
+  "description": "A clean start for Angular with Webpack",
   "scripts": {
-    "build": "rimraf dist && webpack --bail --progress --profile",
+  	"prebuild": "rimraf dist",
+    "build": "webpack --bail --progress --profile",
     "server": "webpack-dev-server --history-api-fallback --inline --progress",
     "test": "karma start",
     "test-watch": "karma start --auto-watch --no-single-run",
@@ -11,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Foxandxss/angular-webpack-workflow.git"
+    "url": "https://github.com/damienvdb06/generator-webpack-angular"
   },
-  "author": "Jesus Rodriguez",
+  "author": "Damien Vandenbossche",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Foxandxss/angular-webpack-workflow/issues"
+    "url": "https://github.com/damienvdb06/generator-webpack-angular/issues"
   },
-  "homepage": "https://github.com/Foxandxss/angular-webpack-workflow",
+  "homepage": "https://github.com/damienvdb06/generator-webpack-angular",
   "dependencies": {
     "angular": "^1.5.0",
     "angular-route": "^1.5.7"
