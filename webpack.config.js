@@ -18,11 +18,16 @@ if (test) {
 		.entryPoint('./src/app/app.js')
 		.hashedOutput()
 		.devtool('source-map')
+		.handleCss()
 		.noErrors()
-		.minify();
+		.minify()
+		.renderHtml()
+		.copyStaticResources();
 } else {
 	configBuilder
 		.devtool('eval-source-map')
+		.handleCss()
+		.renderHtml()
 		.entryPoint('./src/app/app.js');
 }
 
