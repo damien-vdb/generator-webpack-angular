@@ -41,7 +41,7 @@ function ConfigBuilder() {
 		}
 	};
 
-	this.generate = function() {
+	this.build = function() {
 		if (this.output) {
 			computeOutput();
 		}

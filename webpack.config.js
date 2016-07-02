@@ -17,7 +17,7 @@ function testConfiguration() {
 	.withoutOutput()
 	.devtool('inline-source-map')
 	.coverage()
-	.generate();
+	.build();
 }
 
 function prodConfiguration() {
@@ -28,12 +28,12 @@ function prodConfiguration() {
 	.noErrors()
 	.minify()
 	.copyStaticResources()
-	.generate();
+	.build();
 }
 
 function devConfiguration() {
 	return new ConfigBuilder()
 	.entryPoint('./src/app/app.js')
 	.devtool('eval-source-map')
-	.generate();
+	.build();
 }
