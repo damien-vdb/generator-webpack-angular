@@ -9,7 +9,7 @@ require('./screen/first-page/first-page.controller');
 app.config(function($routeProvider) {
   $routeProvider.otherwise({
     template: require('./screen/first-page/first-page.html'),
-    controller: 'FirstPageController',
+    controller: require('./screen/first-page/first-page.controller'),
     controllerAs: 'firstPage'
   });
 });
