@@ -1,33 +1,33 @@
 module.exports = function karmaConfig(config) {
-	config.set({
-		frameworks : [ 'jasmine' ],
+  config.set({
+    frameworks: ['jasmine'],
 
-		reporters : [ 'progress', 'coverage' ],
+    reporters: ['progress', 'coverage'],
 
-		files : [ 'tests.webpack.js' ],
+    files: ['tests.webpack.js'],
 
-		preprocessors : {
-			'tests.webpack.js' : [ 'webpack', 'sourcemap' ]
-		},
+    preprocessors: {
+      'tests.webpack.js': ['webpack', 'sourcemap']
+    },
 
-		browsers : [ 'PhantomJS' ],
+    browsers: ['PhantomJS'],
 
-		singleRun : true,
+    singleRun: true,
 
-		coverageReporter : {
-			dir : 'coverage/',
-			reporters : [ {
-				type : 'text-summary'
-			}, {
-				type : 'html'
-			} ]
-		},
+    coverageReporter: {
+      dir: 'coverage/',
+      reporters: [{
+        type: 'text-summary'
+      }, {
+        type: 'html'
+      }]
+    },
 
-		webpack : require('./webpack.config'),
+    webpack: require('./webpack.config'),
 
-		// Hide webpack build information from output
-		webpackMiddleware : {
-			noInfo : 'errors-only'
-		}
-	});
+    // Hide webpack build information from output
+    webpackMiddleware: {
+      noInfo: 'errors-only'
+    }
+  });
 };

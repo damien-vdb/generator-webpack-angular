@@ -3,17 +3,13 @@ require('angular-route');
 
 require('../style/app.css');
 
-
-var app = angular.module('app', [ 'ngRoute']);
+var app = angular.module('app', ['ngRoute']);
 require('./screen/first-page/first-page.controller');
 
-app.config(route);
-
-function route($routeProvider) {
-
-	$routeProvider.otherwise({
-		template : require('./screen/first-page/first-page.html'),
-		controller : 'FirstPageController',
-		controllerAs : 'firstPage'
-	});
-}
+app.config(function($routeProvider) {
+  $routeProvider.otherwise({
+    template: require('./screen/first-page/first-page.html'),
+    controller: 'FirstPageController',
+    controllerAs: 'firstPage'
+  });
+});
