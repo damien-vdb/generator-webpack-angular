@@ -1,0 +1,19 @@
+{
+	"files": [
+		".editorconfig",
+		"karma.conf.js",
+		"package.json",
+		"README.md",
+		"src/app/app.js",
+		"src/app/screen/first-page/first-page.controller.js",
+		"src/app/screen/first-page/first-page.html",
+		"src/public/img/favicon.ico",
+		"src/public/img/logo.png",
+		"src/public/index.html",
+		"src/style/app.css",
+		"test/app.spec.js",
+		"tests.webpack.js",
+		"webpack.config-builder.js",
+		"webpack.config.js"
+	]
+}
